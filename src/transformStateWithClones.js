@@ -11,23 +11,41 @@ function transformStateWithClones(state, actions) {
   let lastUpdate = { ...state };
 
   for (const act of actions) {
-    if (act.type === 'addProperties') {
-      lastUpdate = Object.assign({}, lastUpdate, act.extraData);
-      historyChanges.push({ ...lastUpdate });
-    }
+    switch (act.type) {
+      case 'addProperties':
+        lastUpdate = Object.assign({}, lastUpdate, act.extraData);
+        historyChanges.push({ ...lastUpdate });
+        break;
 
-    if (act.type === 'removeProperties') {
-      for (const key of act.keysToRemove) {
-        delete lastUpdate[key];
-      }
+      case 'removeProperties':
+        for (const key of act.keysToRemove) {
+          delete lastUpdate[key];
+        }
 
-      historyChanges.push({ ...lastUpdate });
-    }
+        historyChanges.push({ ...lastUpdate });
+        break;
 
-    if (act.type === 'clear') {
-      Object.keys(lastUpdate).forEach((key) => delete lastUpdate[key]);
-      historyChanges.push({ ...lastUpdate });
+      case 'clear':
+        Object.keys(lastUpdate).forEach((key) => delete lastUpdate[key]);
+        historyChanges.push({ ...lastUpdate });
     }
+    // if (act.type === 'addProperties') {
+    //   lastUpdate = Object.assign({}, lastUpdate, act.extraData);
+    //   historyChanges.push({ ...lastUpdate });
+    // }
+
+    // if (act.type === 'removeProperties') {
+    //   for (const key of act.keysToRemove) {
+    //     delete lastUpdate[key];
+    //   }
+
+    //   historyChanges.push({ ...lastUpdate });
+    // }
+
+    // if (act.type === 'clear') {
+    //   Object.keys(lastUpdate).forEach((key) => delete lastUpdate[key]);
+    //   historyChanges.push({ ...lastUpdate });
+    // }
   }
 
   return historyChanges;
