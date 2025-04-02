@@ -14,7 +14,6 @@ function transformStateWithClones(state, actions) {
     switch (act.type) {
       case 'addProperties':
         lastUpdate = Object.assign({}, lastUpdate, act.extraData);
-        historyChanges.push({ ...lastUpdate });
         break;
 
       case 'removeProperties':
@@ -22,13 +21,14 @@ function transformStateWithClones(state, actions) {
           delete lastUpdate[key];
         }
 
-        historyChanges.push({ ...lastUpdate });
         break;
 
       case 'clear':
         Object.keys(lastUpdate).forEach((key) => delete lastUpdate[key]);
-        historyChanges.push({ ...lastUpdate });
     }
+
+    historyChanges.push({ ...lastUpdate });
+
     // if (act.type === 'addProperties') {
     //   lastUpdate = Object.assign({}, lastUpdate, act.extraData);
     //   historyChanges.push({ ...lastUpdate });
